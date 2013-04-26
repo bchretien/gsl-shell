@@ -12,6 +12,25 @@ local function level_number(factors, levels)
     return nb
 end
 
+local function dup_list(b)
+    local a = {}
+    local n = #b
+    for k = 1, n do a[k] = b[k] end
+    return a
+end
+
+local function combine_factors_rec(factors, index, degree, ls, parz)
+    if degree == 0 then
+        for k = 1, #parz do ls[#ls+1] = parz[k] end
+    else
+        if index > #factors then return end
+        local np1 = dup_list(parz)
+        combine_factors_rec(factors, index + 1, degree, ls, np1)
+        np1[#np1+1] = factors[index]
+        combine_factors_rec(factors, index + 1, degree - 1, ls, np1)
+    end
+end
+
 local function enum_levels(factors, levels)
     local ls, ks, ms = {}, {}, {}
     local n = #factors
